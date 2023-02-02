@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { procedure, router } from "../trpc"
+import { procedure, router } from "@/server/trpc"
 
 export const appRouter = router({
 	hello: procedure

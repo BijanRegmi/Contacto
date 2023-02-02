@@ -1,4 +1,4 @@
-import { trpc } from "./utils/trpc"
+import { trpc } from "@/pages/utils/trpc"
 
 export default function Home() {
 	const hello = trpc.hello.useQuery({ name: "clients" })
