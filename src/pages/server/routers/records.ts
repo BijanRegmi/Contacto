@@ -3,8 +3,12 @@ import { addRecordProc, addRecordSchema } from "@/server/controllers/addRecord"
 import {
 	deleteRecordProc,
 	deleteRecordSchema,
-} from "../controllers/deleteRecord"
-import { editRecordProc, editRecordSchema } from "../controllers/editRecord"
+} from "@/server/controllers/deleteRecord"
+import {
+	editRecordProc,
+	editRecordSchema,
+} from "@/server/controllers/editRecord"
+import { getRecordProc, getRecordSchema } from "@/server/controllers/getRecord"
 
 export const recordsRouter = router({
 	add: privateProcedure.input(addRecordSchema).mutation(addRecordProc),
@@ -12,4 +16,5 @@ export const recordsRouter = router({
 		.input(deleteRecordSchema)
 		.mutation(deleteRecordProc),
 	edit: privateProcedure.input(editRecordSchema).mutation(editRecordProc),
+	get: privateProcedure.input(getRecordSchema).query(getRecordProc),
 })
