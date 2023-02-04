@@ -1,19 +1,7 @@
-import { z } from "zod"
-import { procedure, router } from "@/server/trpc"
+import { router } from "@/server/trpc"
+import { authRouter } from "@/server/routers/auth"
 
-export const appRouter = router({
-	hello: procedure
-		.input(
-			z.object({
-				name: z.string(),
-			})
-		)
-		.query(({ input }) => {
-			return {
-				greeting: `hello ${input.name}`,
-			}
-		}),
-})
+export const appRouter = router({ auth: authRouter })
 
 // export type definition of API
 export type AppRouter = typeof appRouter
