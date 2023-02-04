@@ -1,7 +1,7 @@
 import { IoIosArrowBack } from "react-icons/io"
 import { AiOutlineEdit } from "react-icons/ai"
 import { useRouter } from "next/router"
-import { trpc } from "@/pages/utils/trpc"
+import { trpc } from "@/utils/trpc"
 
 const Details = () => {
 	const router = useRouter()

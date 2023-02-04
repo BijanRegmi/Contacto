@@ -27,7 +27,10 @@
 				"./src/pages/*"
 			],
 			"@/server/*": [
-				"./src/pages/server/*"
+				"./src/server/*"
+			],
+			"@/utils/*": [
+				"./src/utils/*"
 			]
 		}
 	},

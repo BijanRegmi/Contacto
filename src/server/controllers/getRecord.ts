@@ -1,5 +1,5 @@
 import { TypeOf, z } from "zod"
-import { Context } from "../context"
+import { Context } from "@/server/context"
 
 export const getRecordSchema = z.object({
 	id: z.string(),

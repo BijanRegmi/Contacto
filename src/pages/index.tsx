@@ -1,4 +1,4 @@
-import { trpc } from "@/pages/utils/trpc"
+import { trpc } from "@/utils/trpc"
 import { useRouter } from "next/router"
 import { FiUserPlus } from "react-icons/fi"
 import Image from "next/image"

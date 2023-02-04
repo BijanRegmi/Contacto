@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server"
 import { TypeOf, z } from "zod"
-import { Context } from "../context"
+import { Context } from "@/server/context"
 
 export const editRecordSchema = z.object({
 	id: z.string(),
