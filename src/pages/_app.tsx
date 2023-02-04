@@ -4,10 +4,7 @@ import { trpc } from "@/utils/trpc"
 
 const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
 	return (
-		<>
-			<div className="flex justify-center my-2">P H O N E B O O K</div>
-			<Component {...pageProps} />
-		</>
+		<Component {...pageProps} />
 	)
 }
 
