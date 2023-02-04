@@ -16,6 +16,16 @@ export const getRecordProc = async ({
 
 	const queryStr = 'SELECT * FROM record WHERE id=$1 AND "accountId"=$2'
 	const response = await db.query(queryStr, [input.id, ctx.userId])
+	const info: {
+		id: string
+		firstname: string
+		lastname: string
+		company: string
+		phone: string
+		email: string
+		birthday?: null
+		accountId: string
+	} = response.rows[0]
 
-	return response.rows[0]
+	return info
 }

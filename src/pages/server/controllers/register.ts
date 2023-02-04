@@ -10,7 +10,7 @@ export const registerProc = async ({
 }: {
 	input: authSchema
 	ctx: Context
-}) => {
+}): Promise<{ success: boolean; id: string }> => {
 	const { email, password } = input
 	const { db } = ctx
 

@@ -10,7 +10,7 @@ export const deleteRecordProc = async ({
 }: {
 	input: TypeOf<typeof deleteRecordSchema>
 	ctx: Context
-}) => {
+}): Promise<{ success: boolean; id: string }> => {
 	const { db } = ctx
 
 	const queryStr =

@@ -20,7 +20,7 @@ export const addRecordProc = async ({
 }: {
 	input: TypeOf<typeof addRecordSchema>
 	ctx: Context
-}) => {
+}): Promise<{ success: boolean; id: string }> => {
 	const { db } = ctx
 	const keys = Object.keys(input)
 

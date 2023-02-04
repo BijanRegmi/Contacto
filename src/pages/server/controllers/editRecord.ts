@@ -24,7 +24,7 @@ export const editRecordProc = async ({
 }: {
 	input: TypeOf<typeof editRecordSchema>
 	ctx: Context
-}) => {
+}): Promise<{ success: boolean; id: string }> => {
 	const { db } = ctx
 
 	const keys = Object.keys(input.data)
