@@ -1,6 +1,6 @@
 import { inferAsyncReturnType } from "@trpc/server"
 import * as trpcNext from "@trpc/server/adapters/next"
-import { dbConn } from "../utils/db"
+import { dbConn } from "@/server/db"
 
 export async function createContext(ctx: trpcNext.CreateNextContextOptions) {
 	const { req, res } = ctx
