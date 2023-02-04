@@ -21,7 +21,7 @@ export default function Home() {
 	}
 
 	return (
-		<>
+		<div className="flex flex-col gap-2">
 			<button className="h-[4rem] flex flex-row items-center align-middle gap-2 bg-black py-1 pl-2 rounded-lg">
 				<FiUserPlus className="h-full aspect-square text-white" />
 				<span
@@ -57,6 +57,6 @@ export default function Home() {
 					</div>
 				)
 			})}
-		</>
+		</div>
 	)
 }
