@@ -4,10 +4,16 @@ export const listRecordsProc = async ({ ctx }: { ctx: Context }) => {
 	const { db } = ctx
 
 	const queryStr =
-		'SELECT id, firstname, lastname FROM record WHERE "accountId"=$1'
+		'SELECT id, firstname, lastname, company, phone, email FROM record WHERE "accountId"=$1'
 
 	const response = await db.query(queryStr, [ctx.userId])
-	const rows: { id: string; firstname: string; lastname: string }[] =
-		response.rows
+	const rows: {
+		id: string
+		firstname: string
+		lastname: string
+		company: string
+		phone: string
+		email: string
+	}[] = response.rows
 	return rows
 }

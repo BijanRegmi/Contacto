@@ -1,8 +1,14 @@
 import { TiContacts } from "react-icons/ti"
 import { MdOutlinePersonAddAlt } from "react-icons/md"
 import { FiLogOut } from "react-icons/fi"
+import { useRouter } from "next/router"
 
 const Header = () => {
+	const router = useRouter()
+	const addContact = () => {
+		router.push("/new")
+	}
+
 	return (
 		<nav className="flex h-[8%] bg-red-400 items-center gap-4 px-2">
 			<h1 className="text-4xl mr-auto">PHONEBOOK</h1>
@@ -10,7 +16,10 @@ const Header = () => {
 				<TiContacts />
 				<li className="list-none hidden sm:block">My Contacts</li>
 			</div>
-			<div className="flex items-center gap-1 hover:underline hover:cursor-pointer">
+			<div
+				className="flex items-center gap-1 hover:underline hover:cursor-pointer"
+				onClick={addContact}
+			>
 				<MdOutlinePersonAddAlt />
 				<li className="list-none hidden sm:block">Add Contact</li>
 			</div>
