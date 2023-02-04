@@ -6,7 +6,7 @@ import { UserToken } from "jsonwebtoken"
 
 declare module "jsonwebtoken" {
 	export interface UserToken extends JwtPayload {
-		id: String
+		id: string
 	}
 }
 
@@ -22,7 +22,8 @@ const withAuth = t.middleware(({ next, ctx }) => {
 	if (!data)
 		throw new TRPCError({ code: "UNAUTHORIZED", cause: "Invalid token." })
 
-	return next({ ctx: { ...ctx, userId: data.id } })
+	ctx.userId = data.id
+	return next()
 })
 
 // Base router and procedure helpers

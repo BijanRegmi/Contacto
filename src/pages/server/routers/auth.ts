@@ -11,6 +11,6 @@ const authSchema = z.object({
 export type authSchema = TypeOf<typeof authSchema>
 
 export const authRouter = router({
-	login: procedure.input(authSchema).query(loginProc),
-	register: procedure.input(authSchema).query(registerProc),
+	login: procedure.input(authSchema).mutation(loginProc),
+	register: procedure.input(authSchema).mutation(registerProc),
 })
