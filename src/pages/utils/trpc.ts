@@ -29,6 +29,11 @@ export const trpc = createTRPCNext<AppRouter>({
 					 * @link https://trpc.io/docs/ssr
 					 **/
 					url: `${getBaseUrl()}/api/trpc`,
+					headers() {
+						return {
+							cookie: ctx?.req?.headers.cookie,
+						}
+					},
 				}),
 			],
 			/**
