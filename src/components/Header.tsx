@@ -1,13 +1,11 @@
 import { TiContacts } from "react-icons/ti"
 import { MdOutlinePersonAddAlt } from "react-icons/md"
 import { FiLogOut } from "react-icons/fi"
-import { useRouter } from "next/router"
+import AddContact from "@/components/AddContact"
+import { useState } from "react"
 
 const Header = () => {
-	const router = useRouter()
-	const addContact = () => {
-		router.push("/new")
-	}
+	const [showAdd, setShowAdd] = useState(false)
 
 	return (
 		<nav className="flex h-[8%] bg-red-400 items-center gap-4 px-2">
@@ -18,7 +16,7 @@ const Header = () => {
 			</div>
 			<div
 				className="flex items-center gap-1 hover:underline hover:cursor-pointer"
-				onClick={addContact}
+				onClick={() => setShowAdd(true)}
 			>
 				<MdOutlinePersonAddAlt />
 				<li className="list-none hidden sm:block">Add Contact</li>
@@ -27,6 +25,7 @@ const Header = () => {
 				<FiLogOut />
 				<li className="list-none hidden sm:block">Logout</li>
 			</div>
+			{showAdd && <AddContact setShow={setShowAdd} />}
 		</nav>
 	)
 }
