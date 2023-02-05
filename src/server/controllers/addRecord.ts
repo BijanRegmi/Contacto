@@ -12,6 +12,7 @@ export const addRecordSchema = z.object({
 		.transform(val => Number(val)),
 	email: z.string().email().optional(),
 	birthday: z.date().optional(),
+	image: z.string().optional(),
 })
 
 export const addRecordProc = async ({
