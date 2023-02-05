@@ -1,9 +1,11 @@
 import { trpc } from "@/utils/trpc"
 import { useRouter } from "next/router"
 import Header from "@/components/Header"
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import DeleteContact from "@/components/DeleteContact"
 import RecordEntry from "@/components/RecordEntry"
+import EditContact from "@/components/EditContact"
+import { Record } from "@/server/controllers/listRecords"
 
 export default function Home() {
 	const router = useRouter()
@@ -24,6 +26,7 @@ export default function Home() {
 	)
 
 	const [delCont, setDelCont] = useState<boolean | string>(false)
+	const [editCont, setEditCont] = useState<boolean | Record>(false)
 
 	if (status == "loading") return <div>Loading</div>
 	if (statusRecord == "loading") return <div>Fetching List</div>
@@ -56,6 +59,7 @@ export default function Home() {
 										contact={contact}
 										idx={idx}
 										setDelCont={setDelCont}
+										setEditCont={setEditCont}
 									/>
 								))}
 							</tbody>
@@ -64,7 +68,16 @@ export default function Home() {
 				</div>
 			</div>
 			{delCont && (
-				<DeleteContact setShow={setDelCont} id={delCont as string} />
+				<DeleteContact
+					setShow={setDelCont as Dispatch<SetStateAction<boolean>>}
+					id={delCont as string}
+				/>
+			)}
+			{editCont && (
+				<EditContact
+					setShow={setEditCont as Dispatch<SetStateAction<boolean>>}
+					contact={editCont as Record}
+				/>
 			)}
 		</div>
 	)

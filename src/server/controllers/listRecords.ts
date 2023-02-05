@@ -3,10 +3,11 @@ import { Context } from "@/server/context"
 export interface Record {
 	id: string
 	firstname: string
-	lastname: string
-	company: string
+	lastname?: string
+	company?: string
 	phone: string
-	email: string
+	email?: string
+	birthday?: string
 }
 
 export const listRecordsProc = async ({ ctx }: { ctx: Context }) => {

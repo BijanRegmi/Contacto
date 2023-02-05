@@ -6,10 +6,12 @@ const RecordEntry = ({
 	contact,
 	idx,
 	setDelCont,
+	setEditCont,
 }: {
 	contact: Record
 	idx: number
 	setDelCont: Dispatch<SetStateAction<string | boolean>>
+	setEditCont: Dispatch<SetStateAction<Record | boolean>>
 }) => {
 	return (
 		<tr>
@@ -36,6 +38,9 @@ const RecordEntry = ({
 					type="button"
 					title="Edit contact"
 					className="p-1 rounded-full text-gray-600 hover:bg-gray-700 focus:bg-gray-700"
+					onClick={() => {
+						setEditCont(contact)
+					}}
 				>
 					<AiOutlineEdit />
 				</button>

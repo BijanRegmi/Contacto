@@ -6,7 +6,7 @@ const DeleteContact = ({
 	setShow,
 	id,
 }: {
-	setShow: Dispatch<SetStateAction<boolean | string>>
+	setShow: Dispatch<SetStateAction<boolean>>
 	id: string
 }) => {
 	const { mutate } = trpc.records.delete.useMutation({

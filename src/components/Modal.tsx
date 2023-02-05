@@ -7,7 +7,7 @@ const Modal = ({
 }: {
 	title: string
 	children?: ReactNode
-	setShow: Dispatch<SetStateAction<boolean | string>>
+	setShow: Dispatch<SetStateAction<boolean>>
 }) => {
 	return (
 		<div className="fixed inset-0 z-10">
