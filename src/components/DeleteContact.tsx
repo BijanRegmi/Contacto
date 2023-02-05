@@ -1,6 +1,6 @@
 import { trpc } from "@/utils/trpc"
 import { Dispatch, SetStateAction } from "react"
-import Modal from "./Modal"
+import Modal from "@/components/Modal"
 
 const DeleteContact = ({
 	setShow,

@@ -1,9 +1,9 @@
 import { trpc } from "@/utils/trpc"
 import { useRouter } from "next/router"
-import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai"
 import Header from "@/components/Header"
 import { useState } from "react"
 import DeleteContact from "@/components/DeleteContact"
+import RecordEntry from "@/components/RecordEntry"
 
 export default function Home() {
 	const router = useRouter()
@@ -50,55 +50,22 @@ export default function Home() {
 								</tr>
 							</thead>
 							<tbody className="border-b bg-gray-900 border-gray-700">
-								{data?.map((contact, idx) => {
-									return (
-										<tr key={contact.id}>
-											<td className="px-3 text-sm font-medium text-gray-400">
-												{idx + 1}
-											</td>
-											<td className="px-3 py-2">
-												<p>{contact.firstname}</p>
-											</td>
-											<td className="px-3 py-2">
-												<p>{contact.lastname}</p>
-											</td>
-											<td className="px-3 py-2">
-												<p>{contact.company}</p>
-											</td>
-											<td className="px-3 py-2">
-												<p>{contact.phone}</p>
-											</td>
-											<td className="px-3 py-2">
-												<p>{contact.email}</p>
-											</td>
-											<td className="px-3 py-2">
-												<button
-													type="button"
-													title="Edit contact"
-													className="p-1 rounded-full text-gray-600 hover:bg-gray-700 focus:bg-gray-700"
-												>
-													<AiOutlineEdit />
-												</button>
-												<button
-													type="button"
-													title="Delete contact"
-													className="p-1 rounded-full text-gray-600 hover:bg-gray-700 focus:bg-gray-700"
-													onClick={() => {
-														setDelCont(contact.id)
-													}}
-												>
-													<AiOutlineDelete />
-												</button>
-											</td>
-										</tr>
-									)
-								})}
+								{data?.map((contact, idx) => (
+									<RecordEntry
+										key={contact.id}
+										contact={contact}
+										idx={idx}
+										setDelCont={setDelCont}
+									/>
+								))}
 							</tbody>
 						</table>
 					</div>
 				</div>
 			</div>
-			{delCont && <DeleteContact setShow={setDelCont} id={delCont as string} />}
+			{delCont && (
+				<DeleteContact setShow={setDelCont} id={delCont as string} />
+			)}
 		</div>
 	)
 }
