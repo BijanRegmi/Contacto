@@ -2,6 +2,8 @@ import { trpc } from "@/utils/trpc"
 import { useRouter } from "next/router"
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai"
 import Header from "@/components/Header"
+import { useState } from "react"
+import DeleteContact from "@/components/DeleteContact"
 
 export default function Home() {
 	const router = useRouter()
@@ -21,7 +23,7 @@ export default function Home() {
 		}
 	)
 
-	const { mutate: deleteContact } = trpc.records.delete.useMutation()
+	const [delCont, setDelCont] = useState<boolean | string>(false)
 
 	if (status == "loading") return <div>Loading</div>
 	if (statusRecord == "loading") return <div>Fetching List</div>
@@ -82,9 +84,7 @@ export default function Home() {
 													title="Delete contact"
 													className="p-1 rounded-full text-gray-600 hover:bg-gray-700 focus:bg-gray-700"
 													onClick={() => {
-														deleteContact({
-															id: contact.id,
-														})
+														setDelCont(contact.id)
 													}}
 												>
 													<AiOutlineDelete />
@@ -98,6 +98,7 @@ export default function Home() {
 					</div>
 				</div>
 			</div>
+			{delCont && <DeleteContact setShow={setDelCont} id={delCont as string} />}
 		</div>
 	)
 }
