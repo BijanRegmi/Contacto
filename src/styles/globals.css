@@ -20,3 +20,20 @@ body,
 	background-color: var(--bg-color);
 	color: var(--fg-color);
 }
+
+#__next {
+	position: relative;
+}
+
+.alert {
+	animation: 1s ease-out 0s 1 slideInFromBottom;
+}
+
+@keyframes slideInFromBottom {
+	0% {
+		transform: translateY(-40%);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
