@@ -12,6 +12,7 @@ CREATE TABLE "account" (
     "id" uuid DEFAULT uuid_generate_v4 (),
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+		"username" TEXT NOT NULL,
 
     CONSTRAINT "account_pkey" PRIMARY KEY ("id")
 );
@@ -26,6 +27,7 @@ CREATE TABLE "record" (
     "email" TEXT,
     "birthday" TIMESTAMP(3),
     "accountId" uuid,
+		"image" TEXT,
 
     CONSTRAINT "record_pkey" PRIMARY KEY ("id")
 );

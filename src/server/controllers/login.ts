@@ -1,14 +1,19 @@
+import { z, TypeOf } from "zod"
 import { TRPCError } from "@trpc/server"
 import { sign } from "jsonwebtoken"
 import { setCookie } from "nookies"
 import type { Context } from "@/server/context"
-import type { authSchema } from "@/server/routers/auth"
+
+export const loginSchema = z.object({
+	email: z.string().email(),
+	password: z.string().min(8),
+})
 
 export const loginProc = async ({
 	input,
 	ctx,
 }: {
-	input: authSchema
+	input: TypeOf<typeof loginSchema>
 	ctx: Context
 }): Promise<{ success: boolean; id: string }> => {
 	const { email, password } = input

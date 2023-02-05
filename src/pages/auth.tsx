@@ -2,12 +2,13 @@ import { ChangeEvent, FormEvent, useState } from "react"
 import { trpc } from "@/utils/trpc"
 import { useRouter } from "next/router"
 import Image from "next/image"
-import { AiOutlineMail } from "react-icons/ai"
+import { AiOutlineMail, AiOutlineUser } from "react-icons/ai"
 import { RiLockPasswordLine } from "react-icons/ri"
 
 const initialState = {
 	email: "",
 	password: "",
+	username: "",
 	state: "login",
 }
 
@@ -30,13 +31,14 @@ export default function Auth() {
 	const [values, setValues] = useState(initialState)
 	const router = useRouter()
 
-	var _action = values.state == "login" ? trpc.auth.login : trpc.auth.register
-	const mutation = _action.useMutation({
+	const { mutate: login } = trpc.auth.login.useMutation({
 		onSuccess: data => {
 			if (data.success) router.push("/")
 		},
-		onError: err => {
-			console.log(err.message)
+	})
+	const { mutate: register } = trpc.auth.register.useMutation({
+		onSuccess: data => {
+			if (data.success) router.push("/")
 		},
 	})
 
@@ -53,7 +55,9 @@ export default function Auth() {
 
 	const submit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		mutation.mutate({ email: values.email, password: values.password })
+		const { state, email, password, username } = values
+		if (state == "login") login({ email, password })
+		else register({ email, password, username })
 	}
 
 	return (
@@ -71,13 +75,26 @@ export default function Auth() {
 					/>
 				</section>
 				<section className="bg-[#88afce] w-2/3 rounded-r-2xl py-2 h-full">
-					<h1 className="text-2xl text-center">
+					<h1 className="text-2xl text-center h-[10%]">
 						{texts[values.state].title}
 					</h1>
 					<form
-						className="flex flex-col items-center gap-4 m-4"
+						className="flex flex-col items-center justify-center gap-4 h-[90%]"
 						onSubmit={submit}
 					>
+						{values.state == "register" && (
+							<div className="relative w-2/3">
+								<AiOutlineUser className="absolute top-1/2 -translate-y-1/2 w-4 h-4 left-1" />
+								<input
+									className="w-full px-6 py-2 focus:outline-none rounded-md text-sm"
+									placeholder="Username"
+									name="username"
+									type="text"
+									value={values.username}
+									onChange={onChange}
+								/>
+							</div>
+						)}
 						<div className="relative w-2/3">
 							<AiOutlineMail className="absolute top-1/2 -translate-y-1/2 w-4 h-4 left-1" />
 							<input
