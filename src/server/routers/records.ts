@@ -8,7 +8,6 @@ import {
 	editRecordProc,
 	editRecordSchema,
 } from "@/server/controllers/editRecord"
-import { getRecordProc, getRecordSchema } from "@/server/controllers/getRecord"
 import { listRecordsProc } from "@/server/controllers/listRecords"
 
 export const recordsRouter = router({
@@ -17,6 +16,5 @@ export const recordsRouter = router({
 		.input(deleteRecordSchema)
 		.mutation(deleteRecordProc),
 	edit: privateProcedure.input(editRecordSchema).mutation(editRecordProc),
-	get: privateProcedure.input(getRecordSchema).query(getRecordProc),
 	list: privateProcedure.query(listRecordsProc),
 })
