@@ -22,8 +22,6 @@ export default function Home() {
 	const [delCont, setDelCont] = useState<boolean | Record>(false)
 	const [editCont, setEditCont] = useState<boolean | Record>(false)
 
-	if (status == "loading") return <div>Fetching List</div>
-
 	return (
 		<div className="h-full">
 			<Head>
