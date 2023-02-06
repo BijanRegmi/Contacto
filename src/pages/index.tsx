@@ -9,7 +9,17 @@ import { HiOutlineUserCircle } from "react-icons/hi"
 import Head from "next/head"
 
 export default function Home() {
-	const { status, data } = trpc.records.list.useQuery(undefined, {
+	const { status: userStatus, data: userData } = trpc.auth.user.useQuery(
+		undefined,
+		{
+			retry: false,
+			refetchOnWindowFocus: false,
+			refetchOnReconnect: true,
+			refetchOnMount: false,
+		}
+	)
+
+	const { data } = trpc.records.list.useQuery(undefined, {
 		select: data => {
 			data.sort((a, b) => a.firstname.localeCompare(b.firstname))
 			return data
@@ -27,7 +37,7 @@ export default function Home() {
 			<Head>
 				<title>Contacto</title>
 			</Head>
-			<Header />
+			<Header status={userStatus} data={userData} />
 			<div className="bg-[#88afce] h-[92%] flex flex-col items-center">
 				<div className="container p-2 mx-auto sm:p-4 text-gray-100">
 					<div className="overflow-x-auto rounded-md">

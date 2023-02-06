@@ -18,7 +18,7 @@ import { BsBuilding } from "react-icons/bs"
 import { RiImageAddLine } from "react-icons/ri"
 import { RxCrossCircled } from "react-icons/rx"
 import Image from "next/image"
-import { ContextActionKind } from "@/utils/reducer"
+import { AlertType, ContextActionKind } from "@/utils/reducer"
 import { AppContext } from "@/pages/_app"
 
 type EditInput = inferRouterInputs<AppRouter>["records"]["edit"]
@@ -43,19 +43,32 @@ const EditContact = ({
 		onSuccess: data => {
 			if (data.success) setShow(false)
 			utils.records.list.invalidate()
+			dispatch({
+				type: ContextActionKind.SPAWNALERT,
+				payload: {
+					type: AlertType.SUCCESS,
+					message: "Successfully edited.",
+				},
+			})
 		},
 		onError: err => {
 			if (err.data?.zodError) {
 				err.data.zodError.issues.forEach(issue => {
 					dispatch({
 						type: ContextActionKind.SPAWNALERT,
-						payload: { type: "error", message: issue.message },
+						payload: {
+							type: AlertType.ERROR,
+							message: issue.message,
+						},
 					})
 				})
 			} else {
 				dispatch({
 					type: ContextActionKind.SPAWNALERT,
-					payload: { type: "error", message: err.message },
+					payload: {
+						type: AlertType.ERROR,
+						message: err.message,
+					},
 				})
 			}
 		},

@@ -7,7 +7,7 @@ import { RiLockPasswordLine } from "react-icons/ri"
 import Spinner from "@/components/Spinner"
 import Head from "next/head"
 import { AppContext } from "@/pages/_app"
-import { ContextActionKind } from "@/utils/reducer"
+import { AlertType, ContextActionKind } from "@/utils/reducer"
 
 enum AuthMethod {
 	LOGIN,
@@ -39,22 +39,40 @@ export default function Auth() {
 	const { dispatch } = useContext(AppContext)
 	const router = useRouter()
 
+	const utils = trpc.useContext()
+
 	const { mutate: login, status: loginStatus } = trpc.auth.login.useMutation({
 		onSuccess: data => {
-			if (data.success) router.push("/")
+			if (data.success) {
+				router.push("/")
+				dispatch({
+					type: ContextActionKind.SPAWNALERT,
+					payload: {
+						type: AlertType.SUCCESS,
+						message: "Logged In.",
+					},
+				})
+				utils.invalidate()
+			}
 		},
 		onError: err => {
 			if (err.data?.zodError) {
 				err.data.zodError.issues.forEach(issue => {
 					dispatch({
 						type: ContextActionKind.SPAWNALERT,
-						payload: { type: "error", message: issue.message },
+						payload: {
+							type: AlertType.ERROR,
+							message: issue.message,
+						},
 					})
 				})
 			} else {
 				dispatch({
 					type: ContextActionKind.SPAWNALERT,
-					payload: { type: "error", message: err.message },
+					payload: {
+						type: AlertType.ERROR,
+						message: err.message,
+					},
 				})
 			}
 		},
@@ -62,20 +80,35 @@ export default function Auth() {
 	const { mutate: register, status: registerStatus } =
 		trpc.auth.register.useMutation({
 			onSuccess: data => {
-				if (data.success) router.push("/")
+				if (data.success) {
+					router.push("/")
+					dispatch({
+						type: ContextActionKind.SPAWNALERT,
+						payload: {
+							type: AlertType.SUCCESS,
+							message: "Registration success.",
+						},
+					})
+				}
 			},
 			onError: err => {
 				if (err.data?.zodError) {
 					err.data.zodError.issues.forEach(issue => {
 						dispatch({
 							type: ContextActionKind.SPAWNALERT,
-							payload: { type: "error", message: issue.message },
+							payload: {
+								type: AlertType.ERROR,
+								message: issue.message,
+							},
 						})
 					})
 				} else {
 					dispatch({
 						type: ContextActionKind.SPAWNALERT,
-						payload: { type: "error", message: err.message },
+						payload: {
+							type: AlertType.ERROR,
+							message: err.message,
+						},
 					})
 				}
 			},

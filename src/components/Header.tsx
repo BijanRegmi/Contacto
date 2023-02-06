@@ -8,36 +8,52 @@ import { useRouter } from "next/router"
 import Spinner from "./Spinner"
 import Logo from "./Logo"
 import { AppContext } from "@/pages/_app"
-import { ContextActionKind } from "@/utils/reducer"
+import { AlertType, ContextActionKind } from "@/utils/reducer"
 
-const Header = () => {
+const Header = ({
+	status,
+	data,
+}: {
+	status: "error" | "success" | "loading"
+	data: { email: string; username: string; id: string } | undefined
+}) => {
 	const [showAdd, setShowAdd] = useState(false)
 	const [showHover, setShowHover] = useState(false)
 	const { dispatch } = useContext(AppContext)
 
 	const router = useRouter()
 
-	const { data, status } = trpc.auth.user.useQuery(undefined, {
-		refetchOnWindowFocus: false,
-		refetchOnReconnect: true,
-		refetchOnMount: false
-	})
 	const { mutate } = trpc.auth.logout.useMutation({
 		onSuccess: data => {
-			if (data.success) router.push("/auth")
+			if (data.success) {
+				router.push("/auth")
+				dispatch({
+					type: ContextActionKind.SPAWNALERT,
+					payload: {
+						type: AlertType.SUCCESS,
+						message: "Logged out.",
+					},
+				})
+			}
 		},
 		onError: err => {
 			if (err.data?.zodError) {
 				err.data.zodError.issues.forEach(issue => {
 					dispatch({
 						type: ContextActionKind.SPAWNALERT,
-						payload: { type: "error", message: issue.message },
+						payload: {
+							type: AlertType.ERROR,
+							message: issue.message,
+						},
 					})
 				})
 			} else {
 				dispatch({
 					type: ContextActionKind.SPAWNALERT,
-					payload: { type: "error", message: err.message },
+					payload: {
+						type: AlertType.ERROR,
+						message: err.message,
+					},
 				})
 			}
 		},
@@ -49,7 +65,13 @@ const Header = () => {
 
 	if (status == "error") {
 		router.push("/auth")
-		return <></>
+		dispatch({
+			type: ContextActionKind.SPAWNALERT,
+			payload: {
+				type: AlertType.ERROR,
+				message: "User not logged in.",
+			},
+		})
 	}
 
 	return (

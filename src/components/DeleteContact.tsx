@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction, useContext } from "react"
 import Modal from "@/components/Modal"
 import { Record } from "@/server/controllers/listRecords"
 import { AppContext } from "@/pages/_app"
-import { ContextActionKind } from "@/utils/reducer"
+import { AlertType, ContextActionKind } from "@/utils/reducer"
 
 const DeleteContact = ({
 	setShow,
@@ -18,21 +18,36 @@ const DeleteContact = ({
 
 	const { mutate } = trpc.records.delete.useMutation({
 		onSuccess: data => {
-			if (data.success) setShow(false)
-			utils.records.list.invalidate()
+			if (data.success) {
+				setShow(false)
+				utils.records.list.invalidate()
+				dispatch({
+					type: ContextActionKind.SPAWNALERT,
+					payload: {
+						type: AlertType.SUCCESS,
+						message: "Successfully deleted.",
+					},
+				})
+			}
 		},
 		onError: err => {
 			if (err.data?.zodError) {
 				err.data.zodError.issues.forEach(issue => {
 					dispatch({
 						type: ContextActionKind.SPAWNALERT,
-						payload: { type: "error", message: issue.message },
+						payload: {
+							type: AlertType.ERROR,
+							message: issue.message,
+						},
 					})
 				})
 			} else {
 				dispatch({
 					type: ContextActionKind.SPAWNALERT,
-					payload: { type: "error", message: err.message },
+					payload: {
+						type: AlertType.ERROR,
+						message: err.message,
+					},
 				})
 			}
 		},
