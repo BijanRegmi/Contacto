@@ -14,6 +14,9 @@ export default function Home() {
 			data.sort((a, b) => a.firstname.localeCompare(b.firstname))
 			return data
 		},
+		refetchOnWindowFocus: false,
+		refetchOnMount: false,
+		refetchOnReconnect: false,
 	})
 
 	const [delCont, setDelCont] = useState<boolean | Record>(false)

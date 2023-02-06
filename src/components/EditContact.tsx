@@ -33,6 +33,7 @@ const EditContact = ({
 	const [state, setState] = useState<EditInput>({ id: contact.id, data: {} })
 	const [defImg, setDefImg] = useState<string | undefined>(undefined)
 	const { dispatch } = useContext(AppContext)
+	const utils = trpc.useContext()
 
 	useEffect(() => {
 		setDefImg(contact.image)
@@ -41,6 +42,7 @@ const EditContact = ({
 	const { mutate } = trpc.records.edit.useMutation({
 		onSuccess: data => {
 			if (data.success) setShow(false)
+			utils.records.list.invalidate()
 		},
 		onError: err => {
 			if (err.data?.zodError) {

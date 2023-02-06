@@ -28,10 +28,12 @@ const AddContact = ({
 }) => {
 	const [state, setState] = useState<AddInput>({ firstname: "", phone: "" })
 	const { dispatch } = useContext(AppContext)
+	const utils = trpc.useContext()
 
 	const { mutate } = trpc.records.add.useMutation({
 		onSuccess: data => {
 			if (data.success) setShow(false)
+			utils.records.list.invalidate()
 		},
 		onError: err => {
 			if (err.data?.zodError) {

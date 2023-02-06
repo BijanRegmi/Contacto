@@ -14,10 +14,12 @@ const DeleteContact = ({
 	contact: Record
 }) => {
 	const { dispatch } = useContext(AppContext)
+	const utils = trpc.useContext()
 
 	const { mutate } = trpc.records.delete.useMutation({
 		onSuccess: data => {
 			if (data.success) setShow(false)
+			utils.records.list.invalidate()
 		},
 		onError: err => {
 			if (err.data?.zodError) {
