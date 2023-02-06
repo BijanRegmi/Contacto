@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, FormEvent, useContext, useState } from "react"
 import { trpc } from "@/utils/trpc"
 import { useRouter } from "next/router"
 import Image from "next/image"
@@ -6,6 +6,8 @@ import { AiOutlineMail, AiOutlineUser, AiOutlineLogin } from "react-icons/ai"
 import { RiLockPasswordLine } from "react-icons/ri"
 import Spinner from "@/components/Spinner"
 import Head from "next/head"
+import { AppContext } from "@/pages/_app"
+import { ContextActionKind } from "@/utils/reducer"
 
 enum AuthMethod {
 	LOGIN,
@@ -34,17 +36,48 @@ const texts: { title: string; span: string; button: string }[] = [
 
 export default function Auth() {
 	const [values, setValues] = useState(initialState)
+	const { dispatch } = useContext(AppContext)
 	const router = useRouter()
 
 	const { mutate: login, status: loginStatus } = trpc.auth.login.useMutation({
 		onSuccess: data => {
 			if (data.success) router.push("/")
 		},
+		onError: err => {
+			if (err.data?.zodError) {
+				err.data.zodError.issues.forEach(issue => {
+					dispatch({
+						type: ContextActionKind.SPAWNALERT,
+						payload: { type: "error", message: issue.message },
+					})
+				})
+			} else {
+				dispatch({
+					type: ContextActionKind.SPAWNALERT,
+					payload: { type: "error", message: err.message },
+				})
+			}
+		},
 	})
 	const { mutate: register, status: registerStatus } =
 		trpc.auth.register.useMutation({
 			onSuccess: data => {
 				if (data.success) router.push("/")
+			},
+			onError: err => {
+				if (err.data?.zodError) {
+					err.data.zodError.issues.forEach(issue => {
+						dispatch({
+							type: ContextActionKind.SPAWNALERT,
+							payload: { type: "error", message: issue.message },
+						})
+					})
+				} else {
+					dispatch({
+						type: ContextActionKind.SPAWNALERT,
+						payload: { type: "error", message: err.message },
+					})
+				}
 			},
 		})
 
@@ -107,6 +140,7 @@ export default function Auth() {
 									type="text"
 									value={values.username}
 									onChange={onChange}
+									required
 								/>
 							</div>
 						)}
@@ -119,6 +153,7 @@ export default function Auth() {
 								type="email"
 								value={values.email}
 								onChange={onChange}
+								required
 							/>
 						</div>
 						<div className="relative w-2/3">
@@ -130,6 +165,7 @@ export default function Auth() {
 								type="password"
 								value={values.password}
 								onChange={onChange}
+								required
 							/>
 						</div>
 						<button className="py-2 w-1/2 rounded-xl bg-slate-900 text-white hover:bg-slate-800 flex items-center justify-center">

@@ -2,20 +2,40 @@ import { MdOutlinePersonAddAlt } from "react-icons/md"
 import { FiLogOut } from "react-icons/fi"
 import { BiUserCircle } from "react-icons/bi"
 import AddContact from "@/components/AddContact"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { trpc } from "@/utils/trpc"
 import { useRouter } from "next/router"
 import Spinner from "./Spinner"
 import Logo from "./Logo"
+import { AppContext } from "@/pages/_app"
+import { ContextActionKind } from "@/utils/reducer"
 
 const Header = () => {
 	const [showAdd, setShowAdd] = useState(false)
 	const [showHover, setShowHover] = useState(false)
+	const { dispatch } = useContext(AppContext)
+
 	const router = useRouter()
+
 	const { data, status } = trpc.auth.user.useQuery()
 	const { mutate } = trpc.auth.logout.useMutation({
 		onSuccess: data => {
 			if (data.success) router.push("/auth")
+		},
+		onError: err => {
+			if (err.data?.zodError) {
+				err.data.zodError.issues.forEach(issue => {
+					dispatch({
+						type: ContextActionKind.SPAWNALERT,
+						payload: { type: "error", message: issue.message },
+					})
+				})
+			} else {
+				dispatch({
+					type: ContextActionKind.SPAWNALERT,
+					payload: { type: "error", message: err.message },
+				})
+			}
 		},
 	})
 

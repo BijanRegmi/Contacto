@@ -1,8 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 import { trpc } from "@/utils/trpc"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useContext } from "react"
 import Modal from "@/components/Modal"
 import { Record } from "@/server/controllers/listRecords"
+import { AppContext } from "@/pages/_app"
+import { ContextActionKind } from "@/utils/reducer"
 
 const DeleteContact = ({
 	setShow,
@@ -11,9 +13,26 @@ const DeleteContact = ({
 	setShow: Dispatch<SetStateAction<boolean>>
 	contact: Record
 }) => {
+	const { dispatch } = useContext(AppContext)
+
 	const { mutate } = trpc.records.delete.useMutation({
 		onSuccess: data => {
 			if (data.success) setShow(false)
+		},
+		onError: err => {
+			if (err.data?.zodError) {
+				err.data.zodError.issues.forEach(issue => {
+					dispatch({
+						type: ContextActionKind.SPAWNALERT,
+						payload: { type: "error", message: issue.message },
+					})
+				})
+			} else {
+				dispatch({
+					type: ContextActionKind.SPAWNALERT,
+					payload: { type: "error", message: err.message },
+				})
+			}
 		},
 	})
 

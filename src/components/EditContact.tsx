@@ -7,6 +7,7 @@ import {
 	useState,
 	MouseEvent,
 	useEffect,
+	useContext,
 } from "react"
 import Modal from "@/components/Modal"
 import { trpc } from "@/utils/trpc"
@@ -17,6 +18,8 @@ import { BsBuilding } from "react-icons/bs"
 import { RiImageAddLine } from "react-icons/ri"
 import { RxCrossCircled } from "react-icons/rx"
 import Image from "next/image"
+import { ContextActionKind } from "@/utils/reducer"
+import { AppContext } from "@/pages/_app"
 
 type EditInput = inferRouterInputs<AppRouter>["records"]["edit"]
 
@@ -29,6 +32,7 @@ const EditContact = ({
 }) => {
 	const [state, setState] = useState<EditInput>({ id: contact.id, data: {} })
 	const [defImg, setDefImg] = useState<string | undefined>(undefined)
+	const { dispatch } = useContext(AppContext)
 
 	useEffect(() => {
 		setDefImg(contact.image)
@@ -37,6 +41,21 @@ const EditContact = ({
 	const { mutate } = trpc.records.edit.useMutation({
 		onSuccess: data => {
 			if (data.success) setShow(false)
+		},
+		onError: err => {
+			if (err.data?.zodError) {
+				err.data.zodError.issues.forEach(issue => {
+					dispatch({
+						type: ContextActionKind.SPAWNALERT,
+						payload: { type: "error", message: issue.message },
+					})
+				})
+			} else {
+				dispatch({
+					type: ContextActionKind.SPAWNALERT,
+					payload: { type: "error", message: err.message },
+				})
+			}
 		},
 	})
 

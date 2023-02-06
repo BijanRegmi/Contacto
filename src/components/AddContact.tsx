@@ -5,6 +5,7 @@ import {
 	SetStateAction,
 	useState,
 	MouseEvent,
+	useContext,
 } from "react"
 import Modal from "@/components/Modal"
 import { trpc } from "@/utils/trpc"
@@ -15,6 +16,8 @@ import { BsBuilding } from "react-icons/bs"
 import { RiImageAddLine } from "react-icons/ri"
 import { RxCrossCircled } from "react-icons/rx"
 import Image from "next/image"
+import { AppContext } from "@/pages/_app"
+import { ContextActionKind } from "@/utils/reducer"
 
 type AddInput = inferRouterInputs<AppRouter>["records"]["add"]
 
@@ -24,10 +27,26 @@ const AddContact = ({
 	setShow: Dispatch<SetStateAction<boolean>>
 }) => {
 	const [state, setState] = useState<AddInput>({ firstname: "", phone: "" })
+	const { dispatch } = useContext(AppContext)
 
 	const { mutate } = trpc.records.add.useMutation({
 		onSuccess: data => {
 			if (data.success) setShow(false)
+		},
+		onError: err => {
+			if (err.data?.zodError) {
+				err.data.zodError.issues.forEach(issue => {
+					dispatch({
+						type: ContextActionKind.SPAWNALERT,
+						payload: { type: "error", message: issue.message },
+					})
+				})
+			} else {
+				dispatch({
+					type: ContextActionKind.SPAWNALERT,
+					payload: { type: "error", message: err.message },
+				})
+			}
 		},
 	})
 
