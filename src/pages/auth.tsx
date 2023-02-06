@@ -5,6 +5,7 @@ import Image from "next/image"
 import { AiOutlineMail, AiOutlineUser, AiOutlineLogin } from "react-icons/ai"
 import { RiLockPasswordLine } from "react-icons/ri"
 import Spinner from "@/components/Spinner"
+import Head from "next/head"
 
 enum AuthMethod {
 	LOGIN,
@@ -73,6 +74,9 @@ export default function Auth() {
 
 	return (
 		<div className="h-full w-full bg-slate-500 py-32 px-80">
+			<Head>
+				<title>{`Contacto | ${texts[values.state].title}`}</title>
+			</Head>
 			<div className="flex h-full w-full border border-slate-900 border-solid rounded-2xl">
 				<section className="w-1/3 relative">
 					<Image

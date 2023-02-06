@@ -61,28 +61,37 @@ const AddContact = ({
 
 	return (
 		<Modal title="Add contact" setShow={setShow}>
-			<form className="flex flex-col gap-2 px-1 py-2" onSubmit={onSumbit}>
+			<form
+				className="flex flex-col gap-2 px-1 py-2 text-black"
+				onSubmit={onSumbit}
+			>
 				<div className="col-span-full py-2">
 					<label
 						htmlFor="pfp"
 						className="flex flex-col justify-center items-center cursor-pointer"
 					>
 						{!state.image ? (
-							<div className="rounded-md h-[8rem] w-[8rem] bg-red-500 relative">
-								<RiImageAddLine className="h-full text-red-200 text-6xl aspect-square absolute left-1/2 -translate-x-1/2" />
+							<div
+								title="Add Image"
+								className="rounded-md h-32 w-32 bg-slate-800 relative"
+							>
+								<RiImageAddLine className="h-full text-slate-300 text-6xl aspect-square absolute left-1/2 -translate-x-1/2" />
 							</div>
 						) : (
-							<div className="p-12 h-[8rem] w-[8rem] aspect-square relative">
+							<div className="p-12 h-32 w-32 aspect-square relative">
 								<Image
 									src={state.image}
 									fill={true}
 									alt="pfp"
 									className="h-full w-full rounded-md object-cover"
 								/>
-								<button className="absolute h-full w-full inset-0 p-8 bg-black opacity-0 hover:opacity-40">
+								<button
+									title="Remove Image"
+									className="absolute h-full w-full inset-0 p-8 rounded-md bg-slate-900 opacity-0 hover:opacity-60"
+								>
 									<RxCrossCircled
 										onClick={clearImage}
-										className="h-full w-full text-white bg-black rounded-md"
+										className="h-full w-full text-slate-100 bg-slate-900 rounded-md"
 									/>
 								</button>
 							</div>
@@ -96,10 +105,10 @@ const AddContact = ({
 						onChange={loadImage}
 					/>
 				</div>
-				<div className="relative border-b border-solid border-slate-400 hover:border-slate-900">
+				<div className="relative">
 					<AiOutlineUser className="absolute top-1/2 -translate-y-1/2 w-4 h-4 left-1" />
 					<input
-						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm"
+						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm border-b border-solid border-slate-400 hover:border-slate-900"
 						placeholder="Firstname"
 						name="firstname"
 						type="text"
@@ -108,10 +117,10 @@ const AddContact = ({
 						required
 					/>
 				</div>
-				<div className="relative border-b border-solid border-slate-400 hover:border-slate-900">
+				<div className="relative">
 					<AiOutlineUser className="absolute top-1/2 -translate-y-1/2 w-4 h-4 left-1 hidden" />
 					<input
-						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm"
+						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm border-b border-solid border-slate-400 hover:border-slate-900"
 						placeholder="Lastname"
 						name="lastname"
 						type="text"
@@ -119,10 +128,10 @@ const AddContact = ({
 						onChange={onChange}
 					/>
 				</div>
-				<div className="relative border-b border-solid border-slate-400 hover:border-slate-900">
+				<div className="relative">
 					<BsBuilding className="absolute top-1/2 -translate-y-1/2 w-4 h-4 left-1" />
 					<input
-						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm"
+						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm border-b border-solid border-slate-400 hover:border-slate-900"
 						placeholder="Company"
 						name="company"
 						type="text"
@@ -130,10 +139,10 @@ const AddContact = ({
 						onChange={onChange}
 					/>
 				</div>
-				<div className="relative border-b border-solid border-slate-400 hover:border-slate-900">
+				<div className="relative">
 					<AiOutlinePhone className="absolute top-1/2 -translate-y-1/2 w-4 h-4 left-1" />
 					<input
-						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm"
+						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm border-b border-solid border-slate-400 hover:border-slate-900"
 						placeholder="Phone"
 						name="phone"
 						type="text"
@@ -142,10 +151,10 @@ const AddContact = ({
 						required
 					/>
 				</div>
-				<div className="relative border-b border-solid border-slate-400 hover:border-slate-900">
+				<div className="relative">
 					<AiOutlineMail className="absolute top-1/2 -translate-y-1/2 w-4 h-4 left-1" />
 					<input
-						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm"
+						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm border-b border-solid border-slate-400 hover:border-slate-900"
 						placeholder="Email"
 						name="email"
 						type="email"
@@ -153,9 +162,9 @@ const AddContact = ({
 						onChange={onChange}
 					/>
 				</div>
-				<div className="self-end flex flex-row-reverse gap-4">
+				<div className="self-end flex flex-row-reverse gap-4 text-slate-100">
 					<button
-						className="bg-red-400 px-4 py-1 rounded-sm"
+						className="bg-slate-900 px-4 py-1 rounded-sm"
 						type="button"
 						onClick={() => {
 							setShow(false)
@@ -163,7 +172,7 @@ const AddContact = ({
 					>
 						Cancel
 					</button>
-					<button className="bg-green-400 px-4 py-1 rounded-sm">
+					<button className="bg-slate-900 px-4 py-1 rounded-sm">
 						Add
 					</button>
 				</div>

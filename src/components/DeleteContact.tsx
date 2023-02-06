@@ -1,13 +1,15 @@
+/* eslint-disable react/no-unescaped-entities */
 import { trpc } from "@/utils/trpc"
 import { Dispatch, SetStateAction } from "react"
 import Modal from "@/components/Modal"
+import { Record } from "@/server/controllers/listRecords"
 
 const DeleteContact = ({
 	setShow,
-	id,
+	contact,
 }: {
 	setShow: Dispatch<SetStateAction<boolean>>
-	id: string
+	contact: Record
 }) => {
 	const { mutate } = trpc.records.delete.useMutation({
 		onSuccess: data => {
@@ -16,10 +18,13 @@ const DeleteContact = ({
 	})
 
 	return (
-		<Modal title="Confirm Delete?" setShow={setShow}>
-			<div className="flex flex-row-reverse gap-4">
+		<Modal title="Delete Contact" setShow={setShow}>
+			<span className="block mb-4">
+				Are you sure you want to delete {contact.firstname}'s contact?
+			</span>
+			<div className="flex flex-row-reverse gap-4 text-slate-100">
 				<button
-					className="bg-red-400 px-4 py-1 rounded-sm"
+					className="bg-slate-900 px-4 py-1 rounded-sm"
 					onClick={() => {
 						setShow(false)
 					}}
@@ -27,9 +32,9 @@ const DeleteContact = ({
 					No
 				</button>
 				<button
-					className="bg-green-400 px-4 py-1 rounded-sm"
+					className="bg-slate-900 px-4 py-1 rounded-sm"
 					onClick={() => {
-						mutate({ id })
+						mutate({ id: contact.id })
 					}}
 				>
 					Yes

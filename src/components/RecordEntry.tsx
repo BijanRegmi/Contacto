@@ -5,23 +5,24 @@ import Image from "next/image"
 
 const RecordEntry = ({
 	contact,
-	idx,
 	setDelCont,
 	setEditCont,
 }: {
 	contact: Record
-	idx: number
-	setDelCont: Dispatch<SetStateAction<string | boolean>>
+	setDelCont: Dispatch<SetStateAction<Record | boolean>>
 	setEditCont: Dispatch<SetStateAction<Record | boolean>>
 }) => {
 	return (
-		<tr className="h-16 border-solid border-2 border-green-900">
-			<td className="px-3 text-sm font-medium text-gray-400 relative">
-				<Image
-					src={contact.image as string}
-					alt="User image"
-					fill={true}
-				/>
+		<tr className="h-16 border-b border-solid border-gray-700 text-slate-200">
+			<td className="h-full aspect-square">
+				<div className="relative h-4/5 max-h-4/5 aspect-square mx-auto">
+					<Image
+						src={contact.image as string || "/defaultUser.png"}
+						alt="User image"
+						fill={true}
+						className="rounded-full aspect-square border-solid border-4 border-slate-700"
+					/>
+				</div>
 			</td>
 			<td className="px-3 py-2">
 				<p>
@@ -41,22 +42,22 @@ const RecordEntry = ({
 				<button
 					type="button"
 					title="Edit contact"
-					className="p-1 rounded-full text-gray-600 hover:bg-gray-700 focus:bg-gray-700"
+					className="p-1 rounded-full text-slate-400 hover:bg-slate-700"
 					onClick={() => {
 						setEditCont(contact)
 					}}
 				>
-					<AiOutlineEdit />
+					<AiOutlineEdit className="text-xl" />
 				</button>
 				<button
 					type="button"
 					title="Delete contact"
-					className="p-1 rounded-full text-gray-600 hover:bg-gray-700 focus:bg-gray-700"
+					className="p-1 rounded-full text-slate-400 hover:bg-slate-700"
 					onClick={() => {
-						setDelCont(contact.id)
+						setDelCont(contact)
 					}}
 				>
-					<AiOutlineDelete />
+					<AiOutlineDelete className="text-lg" />
 				</button>
 			</td>
 		</tr>

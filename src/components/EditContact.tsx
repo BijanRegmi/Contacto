@@ -6,6 +6,7 @@ import {
 	SetStateAction,
 	useState,
 	MouseEvent,
+	useEffect,
 } from "react"
 import Modal from "@/components/Modal"
 import { trpc } from "@/utils/trpc"
@@ -27,6 +28,11 @@ const EditContact = ({
 	contact: Record
 }) => {
 	const [state, setState] = useState<EditInput>({ id: contact.id, data: {} })
+	const [defImg, setDefImg] = useState<string | undefined>(undefined)
+
+	useEffect(() => {
+		setDefImg(contact.image)
+	}, [contact.image])
 
 	const { mutate } = trpc.records.edit.useMutation({
 		onSuccess: data => {
@@ -52,9 +58,10 @@ const EditContact = ({
 	const clearImage = (e: MouseEvent<SVGElement, globalThis.MouseEvent>) => {
 		e.stopPropagation()
 		e.preventDefault()
+		setDefImg(undefined)
 		setState(oldVal => ({
 			id: oldVal.id,
-			data: { ...oldVal.data, image: undefined },
+			data: { ...oldVal.data, image: "" },
 		}))
 	}
 
@@ -79,27 +86,33 @@ const EditContact = ({
 						htmlFor="pfp"
 						className="flex flex-col justify-center items-center cursor-pointer"
 					>
-						{state.data.image || contact.image ? (
-							<div className="p-12 h-[8rem] w-[8rem] aspect-square relative">
+						{defImg || state.data.image ? (
+							<div className="p-12 h-32 w-32 aspect-square relative">
 								<Image
 									src={
-										(state.data.image as string) ||
-										(contact.image as string)
+										(defImg as string) ||
+										(state.data.image as string)
 									}
 									fill={true}
 									alt="pfp"
 									className="h-full w-full rounded-md object-cover"
 								/>
-								<button className="absolute h-full w-full inset-0 p-8 bg-black opacity-0 hover:opacity-40">
+								<button
+									title="Remove Image"
+									className="absolute h-full w-full inset-0 p-8 rounded-md bg-slate-900 opacity-0 hover:opacity-60"
+								>
 									<RxCrossCircled
 										onClick={clearImage}
-										className="h-full w-full text-white bg-black rounded-md"
+										className="h-full w-full text-slate-100 bg-slate-900 rounded-md"
 									/>
 								</button>
 							</div>
 						) : (
-							<div className="rounded-md h-[8rem] w-[8rem] bg-red-500 relative">
-								<RiImageAddLine className="h-full text-red-200 text-6xl aspect-square absolute left-1/2 -translate-x-1/2" />
+							<div
+								title="Add Image"
+								className="rounded-md h-32 w-32 bg-slate-800 relative"
+							>
+								<RiImageAddLine className="h-full text-slate-300 text-6xl aspect-square absolute left-1/2 -translate-x-1/2" />
 							</div>
 						)}
 					</label>
@@ -171,11 +184,17 @@ const EditContact = ({
 						onChange={onChange}
 					/>
 				</div>
-				<div className="self-end flex flex-row-reverse gap-4">
-					<button className="bg-red-400 px-4 py-1 rounded-sm">
+				<div className="self-end flex flex-row-reverse gap-4 text-slate-100">
+					<button
+						className="bg-slate-900 px-4 py-1 rounded-sm"
+						type="button"
+						onClick={() => {
+							setShow(false)
+						}}
+					>
 						Cancel
 					</button>
-					<button className="bg-green-400 px-4 py-1 rounded-sm">
+					<button className="bg-slate-900 px-4 py-1 rounded-sm">
 						Save
 					</button>
 				</div>
