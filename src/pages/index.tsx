@@ -1,14 +1,20 @@
 import { trpc } from "@/utils/trpc"
 import Header from "@/components/Header"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useContext, useState } from "react"
 import DeleteContact from "@/components/DeleteContact"
 import RecordEntry from "@/components/RecordEntry"
 import EditContact from "@/components/EditContact"
 import { Record } from "@/server/controllers/listRecords"
 import { HiOutlineUserCircle } from "react-icons/hi"
 import Head from "next/head"
+import { AppContext } from "./_app"
+import { useRouter } from "next/router"
+import { AlertType, ContextActionKind } from "@/utils/reducer"
 
 export default function Home() {
+	const router = useRouter()
+	const { dispatch } = useContext(AppContext)
+
 	const { status: userStatus, data: userData } = trpc.auth.user.useQuery(
 		undefined,
 		{
@@ -16,6 +22,16 @@ export default function Home() {
 			refetchOnWindowFocus: false,
 			refetchOnReconnect: true,
 			refetchOnMount: false,
+			onError: err => {
+				router.push("/auth")
+				dispatch({
+					type: ContextActionKind.SPAWNALERT,
+					payload: {
+						type: AlertType.ERROR,
+						message: err.message,
+					},
+				})
+			},
 		}
 	)
 

@@ -63,17 +63,6 @@ const Header = ({
 		mutate()
 	}
 
-	if (status == "error") {
-		router.push("/auth")
-		dispatch({
-			type: ContextActionKind.SPAWNALERT,
-			payload: {
-				type: AlertType.ERROR,
-				message: "User not logged in.",
-			},
-		})
-	}
-
 	return (
 		<nav className="flex h-[8%] bg-[#0b1222] items-center gap-4 px-4">
 			<Logo />
@@ -110,7 +99,7 @@ const Header = ({
 						<>
 							<BiUserCircle />
 							<li className="list-none hidden sm:block">
-								{data.username}
+								{data?.username}
 							</li>
 						</>
 					)}
