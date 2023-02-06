@@ -44,10 +44,9 @@ export default function Home() {
 							<thead>
 								<tr className="bg-gray-700">
 									<th className="p-3">#</th>
-									<th className="p-3">FirstName</th>
-									<th className="p-3">LastName</th>
-									<th className="p-3">Company</th>
+									<th className="p-3">Name</th>
 									<th className="p-3">Phone</th>
+									<th className="p-3">Company</th>
 									<th className="p-3">Email</th>
 									<th className="p-3">Actions</th>
 								</tr>
