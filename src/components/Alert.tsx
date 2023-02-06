@@ -17,7 +17,6 @@ const Alert = () => {
 	}
 
 	const closeAlert = (idx: number) => {
-		console.log("Closing alert of idx: ", idx, " Message: ", alerts[idx].message)
 		dispatch({ type: ContextActionKind.CLOSEALERT, payload: { idx } })
 	}
 

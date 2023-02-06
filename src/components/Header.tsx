@@ -18,7 +18,9 @@ const Header = () => {
 	const router = useRouter()
 
 	const { data, status } = trpc.auth.user.useQuery(undefined, {
-		refetchOnWindowFocus: true,
+		refetchOnWindowFocus: false,
+		refetchOnReconnect: true,
+		refetchOnMount: false
 	})
 	const { mutate } = trpc.auth.logout.useMutation({
 		onSuccess: data => {

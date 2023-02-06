@@ -170,18 +170,6 @@ const EditContact = ({
 					/>
 				</div>
 				<div className="relative border-b border-solid border-slate-400 hover:border-slate-900">
-					<BsBuilding className="absolute top-1/2 -translate-y-1/2 w-4 h-4 left-1" />
-					<input
-						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm"
-						placeholder="Company"
-						name="company"
-						type="text"
-						defaultValue={contact.company}
-						value={state.data.company}
-						onChange={onChange}
-					/>
-				</div>
-				<div className="relative border-b border-solid border-slate-400 hover:border-slate-900">
 					<AiOutlinePhone className="absolute top-1/2 -translate-y-1/2 w-4 h-4 left-1" />
 					<input
 						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm"
@@ -190,6 +178,18 @@ const EditContact = ({
 						type="text"
 						defaultValue={contact.phone}
 						value={state.data.phone}
+						onChange={onChange}
+					/>
+				</div>
+				<div className="relative border-b border-solid border-slate-400 hover:border-slate-900">
+					<BsBuilding className="absolute top-1/2 -translate-y-1/2 w-4 h-4 left-1" />
+					<input
+						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm"
+						placeholder="Company"
+						name="company"
+						type="text"
+						defaultValue={contact.company}
+						value={state.data.company}
 						onChange={onChange}
 					/>
 				</div>

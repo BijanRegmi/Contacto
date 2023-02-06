@@ -150,17 +150,6 @@ const AddContact = ({
 					/>
 				</div>
 				<div className="relative">
-					<BsBuilding className="absolute top-1/2 -translate-y-1/2 w-4 h-4 left-1" />
-					<input
-						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm border-b border-solid border-slate-400 hover:border-slate-900"
-						placeholder="Company"
-						name="company"
-						type="text"
-						value={state.company}
-						onChange={onChange}
-					/>
-				</div>
-				<div className="relative">
 					<AiOutlinePhone className="absolute top-1/2 -translate-y-1/2 w-4 h-4 left-1" />
 					<input
 						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm border-b border-solid border-slate-400 hover:border-slate-900"
@@ -170,6 +159,17 @@ const AddContact = ({
 						value={state.phone}
 						onChange={onChange}
 						required
+					/>
+				</div>
+				<div className="relative">
+					<BsBuilding className="absolute top-1/2 -translate-y-1/2 w-4 h-4 left-1" />
+					<input
+						className="w-full px-6 py-2 focus:outline-none rounded-md text-sm border-b border-solid border-slate-400 hover:border-slate-900"
+						placeholder="Company"
+						name="company"
+						type="text"
+						value={state.company}
+						onChange={onChange}
 					/>
 				</div>
 				<div className="relative">
