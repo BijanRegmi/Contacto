@@ -6,7 +6,6 @@ import {
 	SetStateAction,
 	useState,
 	MouseEvent,
-	useEffect,
 	useContext,
 } from "react"
 import Modal from "@/components/Modal"
@@ -30,14 +29,19 @@ const EditContact = ({
 	setShow: Dispatch<SetStateAction<boolean>>
 	contact: Record
 }) => {
-	const [state, setState] = useState<EditInput>({ id: contact.id, data: {} })
-	const [defImg, setDefImg] = useState<string | undefined>(undefined)
+	const [state, setState] = useState<EditInput>({
+		id: contact.id,
+		data: {
+			firstname: contact.firstname,
+			lastname: contact.lastname,
+			phone: contact.phone,
+			company: contact.company,
+			email: contact.email,
+			image: contact.image,
+		},
+	})
 	const { dispatch } = useContext(AppContext)
 	const utils = trpc.useContext()
-
-	useEffect(() => {
-		setDefImg(contact.image)
-	}, [contact.image])
 
 	const { mutate } = trpc.records.edit.useMutation({
 		onSuccess: data => {
@@ -86,13 +90,31 @@ const EditContact = ({
 
 	const onSumbit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		if (Object.keys(state.data).length != 0) mutate(state)
+		const editedData: EditInput = { id: state.id, data: {} }
+
+		let key: keyof typeof state.data
+		for (key in state.data) {
+			if (state.data[key] !== contact[key])
+				editedData.data[key] = state.data[key]
+		}
+
+		if (Object.keys(editedData.data).length == 0) {
+			dispatch({
+				type: ContextActionKind.SPAWNALERT,
+				payload: {
+					type: AlertType.DEBUG,
+					message: "Nothing changed.",
+				},
+			})
+			return
+		}
+
+		mutate(editedData)
 	}
 
 	const clearImage = (e: MouseEvent<SVGElement, globalThis.MouseEvent>) => {
 		e.stopPropagation()
 		e.preventDefault()
-		setDefImg(undefined)
 		setState(oldVal => ({
 			id: oldVal.id,
 			data: { ...oldVal.data, image: "" },
@@ -120,13 +142,10 @@ const EditContact = ({
 						htmlFor="pfp"
 						className="flex flex-col justify-center items-center cursor-pointer"
 					>
-						{defImg || state.data.image ? (
+						{state.data.image ? (
 							<div className="p-12 h-32 w-32 aspect-square relative">
 								<Image
-									src={
-										(defImg as string) ||
-										(state.data.image as string)
-									}
+									src={state.data.image}
 									fill={true}
 									alt="pfp"
 									className="h-full w-full rounded-md object-cover"
@@ -165,7 +184,6 @@ const EditContact = ({
 						placeholder="Firstname"
 						name="firstname"
 						type="text"
-						defaultValue={contact.firstname}
 						value={state.data.firstname}
 						onChange={onChange}
 					/>
@@ -177,7 +195,6 @@ const EditContact = ({
 						placeholder="Lastname"
 						name="lastname"
 						type="text"
-						defaultValue={contact.lastname}
 						value={state.data.lastname}
 						onChange={onChange}
 					/>
@@ -189,7 +206,6 @@ const EditContact = ({
 						placeholder="Phone"
 						name="phone"
 						type="text"
-						defaultValue={contact.phone}
 						value={state.data.phone}
 						onChange={onChange}
 					/>
@@ -201,7 +217,6 @@ const EditContact = ({
 						placeholder="Company"
 						name="company"
 						type="text"
-						defaultValue={contact.company}
 						value={state.data.company}
 						onChange={onChange}
 					/>
@@ -213,7 +228,6 @@ const EditContact = ({
 						placeholder="Email"
 						name="email"
 						type="email"
-						defaultValue={contact.email}
 						value={state.data.email}
 						onChange={onChange}
 					/>

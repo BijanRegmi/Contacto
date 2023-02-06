@@ -7,7 +7,6 @@ export interface Record {
 	company?: string
 	phone: string
 	email?: string
-	birthday?: string
 	image?: string
 }
 

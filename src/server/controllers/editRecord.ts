@@ -14,7 +14,6 @@ export const editRecordSchema = z.object({
 			.transform(val => Number(val))
 			.optional(),
 		email: z.string().email().optional(),
-		birthday: z.date().optional(),
 		image: z.string().optional(),
 	}),
 })

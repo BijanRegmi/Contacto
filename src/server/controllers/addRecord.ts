@@ -11,7 +11,6 @@ export const addRecordSchema = z.object({
 		.length(10)
 		.transform(val => Number(val)),
 	email: z.string().email().optional(),
-	birthday: z.date().optional(),
 	image: z.string().optional(),
 })
 

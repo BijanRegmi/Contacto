@@ -25,7 +25,6 @@ CREATE TABLE "record" (
     "company" TEXT,
     "phone" BIGINT NOT NULL,
     "email" TEXT,
-    "birthday" TIMESTAMP(3),
     "accountId" uuid,
 		"image" TEXT,
 
