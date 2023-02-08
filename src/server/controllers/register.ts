@@ -3,6 +3,7 @@ import { TRPCError } from "@trpc/server"
 import { sign } from "jsonwebtoken"
 import { setCookie } from "nookies"
 import type { Context } from "@/server/context"
+import { hashSync } from "bcryptjs"
 
 export const registerSchema = z.object({
 	email: z.string().email(),
@@ -20,9 +21,11 @@ export const registerProc = async ({
 	const { email, password, username } = input
 	const { db } = ctx
 
+	const hashedPassword = hashSync(password, process.env.SALT || 10)
+
 	const queryStr =
 		"INSERT INTO account(email, password, username) VALUES($1, $2, $3) RETURNING id"
-	const response = await db.query(queryStr, [email, password, username])
+	const response = await db.query(queryStr, [email, hashedPassword, username])
 
 	if (response.rows.length == 0)
 		throw new TRPCError({
