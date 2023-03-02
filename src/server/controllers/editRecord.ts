@@ -34,9 +34,9 @@ export const editRecordProc = async ({
 		keys.map((key, idx) => `${key} = \$${idx + 1}`).join(", ") +
 		" WHERE id = $" +
 		`${keys.length + 1}` +
-		' AND "accountId" = $' +
+		" AND accountId = $" +
 		`${keys.length + 2}` +
-		"RETURNING id"
+		" RETURNING id"
 	const response = await db.query(queryStr, [
 		...Object.values(input.data),
 		input.id,

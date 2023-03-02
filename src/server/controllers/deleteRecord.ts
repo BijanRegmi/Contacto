@@ -14,7 +14,7 @@ export const deleteRecordProc = async ({
 	const { db } = ctx
 
 	const queryStr =
-		'DELETE FROM record WHERE id=$1 AND "accountId"=$2 RETURNING id'
+		"DELETE FROM record WHERE id=$1 AND accountId=$2 RETURNING id"
 	const response = await db.query(queryStr, [input.id, ctx.userId])
 
 	if (response.rows.length == 0)

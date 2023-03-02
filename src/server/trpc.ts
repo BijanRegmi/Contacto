@@ -13,6 +13,7 @@ declare module "jsonwebtoken" {
 
 const t = initTRPC.context<Context>().create({
 	errorFormatter({ shape, error }) {
+		console.error(error.stack)
 		return {
 			...shape,
 			data: {

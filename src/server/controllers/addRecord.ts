@@ -27,7 +27,7 @@ export const addRecordProc = async ({
 	const queryStr =
 		"INSERT INTO record(" +
 		keys.join(", ") +
-		', "accountId") VALUES (' +
+		", accountId) VALUES (" +
 		keys.map((_, idx) => `\$${idx + 1}`).join(", ") +
 		", $" +
 		`${keys.length + 1}` +

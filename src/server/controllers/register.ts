@@ -21,7 +21,7 @@ export const registerProc = async ({
 	const { email, password, username } = input
 	const { db } = ctx
 
-	const hashedPassword = hashSync(password, process.env.SALT || 10)
+	const hashedPassword = hashSync(password, 10)
 
 	const queryStr =
 		"INSERT INTO account(email, password, username) VALUES($1, $2, $3) RETURNING id"
