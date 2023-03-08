@@ -3,11 +3,11 @@
 ## Setup database
 - Start postgresql service 
 	```
-	sudo systemctl start postgresql
+	sudo systemctl start mariadb
 	```
 - Run schema file
 	```
-	psql -U <USER> -f src/server/schema.sql
+	mariadb -U <USER> -p < src/servver/schema.sql
 	```
 
 ## Setup project

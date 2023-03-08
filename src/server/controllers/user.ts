@@ -1,13 +1,19 @@
 import type { Context } from "@/server/context"
 import { TRPCError } from "@trpc/server"
 import { destroyCookie } from "nookies"
-export const userProc = async ({ ctx }: { ctx: Context }) => {
+import { UserResponse } from "index"
+
+export const userProc = async ({
+	ctx,
+}: {
+	ctx: Context
+}): Promise<{ id: string; email: string; username: string }> => {
 	const { db } = ctx
-	const response = await db.query(
-		"SELECT email, username, id FROM account WHERE id=$1",
+	const [response, _fields] = await db.query<UserResponse[]>(
+		"SELECT email, username, id FROM account WHERE id=?",
 		[ctx.userId]
 	)
-	if (response.rows.length == 0) {
+	if (response.length == 0) {
 		destroyCookie({ res: ctx.res }, "token")
 		throw new TRPCError({
 			code: "UNAUTHORIZED",
@@ -15,5 +21,5 @@ export const userProc = async ({ ctx }: { ctx: Context }) => {
 		})
 	}
 
-	return response.rows[0] as { email: string; username: string; id: string }
+	return response[0]
 }

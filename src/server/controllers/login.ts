@@ -4,6 +4,7 @@ import { sign } from "jsonwebtoken"
 import { setCookie } from "nookies"
 import type { Context } from "@/server/context"
 import { compareSync } from "bcryptjs"
+import { QueryResponse } from "index"
 
 export const loginSchema = z.object({
 	email: z.string().email(),
@@ -20,23 +21,25 @@ export const loginProc = async ({
 	const { email, password } = input
 	const { db } = ctx
 
-	const queryStr = "SELECT id, password FROM account WHERE email=$1"
-	const response = await db.query(queryStr, [email])
+	const queryStr = "SELECT id, password FROM account WHERE email=?"
+	const [response, _fields] = await db.query<QueryResponse[]>(queryStr, [
+		email,
+	])
 
-	if (response.rows.length == 0)
+	if (response.length == 0)
 		throw new TRPCError({
 			code: "BAD_REQUEST",
 			message: "No account exists with this email.",
 		})
 
-	if (!compareSync(password, response.rows[0].password))
+	if (!compareSync(password, response[0].password))
 		throw new TRPCError({
 			code: "BAD_REQUEST",
 			message: "Passowrd incorrect.",
 		})
 
 	const token = sign(
-		{ id: response.rows[0].id },
+		{ id: response[0].id },
 		process.env.SECRET || "Secret"
 	)
 
@@ -45,5 +48,5 @@ export const loginProc = async ({
 		sameSite: "lax",
 	})
 
-	return { success: true, id: response.rows[0].id }
+	return { success: true, id: response[0].id }
 }

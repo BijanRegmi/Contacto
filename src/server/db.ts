@@ -1,21 +1,57 @@
-import { Client } from "pg"
+import mysql from "mysql2/promise"
 import path from "path"
 import { config } from "dotenv"
+import { FieldPacket, OkPacket, ResultSetHeader, RowDataPacket } from "mysql2"
 
 config({ path: path.resolve(__dirname + "/../../../../../.env") })
 
 declare global {
-	var db: Client
+	var db: {
+		pool: mysql.Pool
+		query: <
+			T extends
+				| RowDataPacket[][]
+				| RowDataPacket[]
+				| OkPacket
+				| OkPacket[]
+				| ResultSetHeader
+		>(
+			query: string,
+			params: any[]
+		) => Promise<[T, FieldPacket[]]>
+	}
 }
 
 export const dbConn = async () => {
 	if (global.db) return global.db
 
 	console.log("Creating new database connection.")
-	const client = new Client({})
-	await client.connect()
+	const pool = mysql.createPool({
+		connectionLimit: 10,
+		host: process.env.SQL_HOST,
+		user: process.env.SQL_USER,
+		password: process.env.SQL_PASS,
+		database: process.env.SQL_DB,
+	})
 
-	global.db = client
+	const query = async <
+		T extends
+			| RowDataPacket[][]
+			| RowDataPacket[]
+			| OkPacket
+			| OkPacket[]
+			| ResultSetHeader
+	>(
+		query: string,
+		params: any[]
+	) => {
+		return pool.query<T>(query, params)
+	}
 
-	return client
+	global.db = {
+		pool,
+		query,
+	}
+
+	return { pool, query }
 }

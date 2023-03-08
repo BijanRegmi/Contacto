@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server"
 import { TypeOf, z } from "zod"
 import { Context } from "@/server/context"
+import { QueryResponse } from "index"
 
 export const addRecordSchema = z.object({
 	firstname: z.string(),
@@ -28,21 +29,19 @@ export const addRecordProc = async ({
 		"INSERT INTO record(" +
 		keys.join(", ") +
 		", accountId) VALUES (" +
-		keys.map((_, idx) => `\$${idx + 1}`).join(", ") +
-		", $" +
-		`${keys.length + 1}` +
-		") RETURNING id"
+		keys.map(_ => "?").join(", ") +
+		", ?) RETURNING id"
 
-	const response = await db.query(queryStr, [
+	const [response, _fields] = await db.query<QueryResponse[]>(queryStr, [
 		...Object.values(input),
 		ctx.userId,
 	])
 
-	if (response.rows.length == 0)
+	if (response.length == 0)
 		throw new TRPCError({
 			code: "BAD_REQUEST",
 			message: "Adding record failed.",
 		})
 
-	return { success: true, id: response.rows[0].id }
+	return { success: true, id: response[0].id }
 }

@@ -4,6 +4,7 @@ import { sign } from "jsonwebtoken"
 import { setCookie } from "nookies"
 import type { Context } from "@/server/context"
 import { hashSync } from "bcryptjs"
+import { QueryResponse } from "index"
 
 export const registerSchema = z.object({
 	email: z.string().email(),
@@ -24,20 +25,24 @@ export const registerProc = async ({
 	const hashedPassword = hashSync(password, 10)
 
 	const queryStr =
-		"INSERT INTO account(email, password, username) VALUES($1, $2, $3) RETURNING id"
-	const response = await db.query(queryStr, [email, hashedPassword, username])
+		"INSERT INTO account(email, password, username) VALUES(?, ?, ?) RETURNING id"
+	const [response, _fields] = await db.query<QueryResponse[]>(queryStr, [
+		email,
+		hashedPassword,
+		username,
+	])
 
-	if (response.rows.length == 0)
+	if (response.length == 0)
 		throw new TRPCError({
 			code: "INTERNAL_SERVER_ERROR",
 			message: "Failed to register.",
 		})
 
-	const token = sign(response.rows[0], process.env.SECRET || "secret")
+	const token = sign(response[0], process.env.SECRET || "secret")
 	setCookie({ res: ctx.res }, "token", token, {
 		httpOnly: true,
 		sameSite: "lax",
 	})
 
-	return { success: true, id: response.rows[0].id }
+	return { success: true, id: response[0].id }
 }
