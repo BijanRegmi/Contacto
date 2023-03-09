@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  database:
+    image: mariadb
+    env_file: ./.env
+    environment:
+      - MARIADB_ROOT_PASSWORD=$SQL_ROOT_PASS
+      - MARIADB_USER=$SQL_USER
+      - MARIADB_PASSWORD=$SQL_PASS
+      - MARIADB_DATABASE=$SQL_DB
+    ports:
+      - $SQL_EXPOSE_PORT:3306
+    volumes:
+      - ./src/server/schema.sql:/docker-entrypoint-initdb.d/setup.sql
+      - db:/var/lib/mysql
+  contacto:
+    depends_on:
+      - database
+    build: .
+    env_file: ./.env
+    environment:
+      - SQL_HOST=database
+      - SQL_PORT=3306
+    ports:
+      - $NODE_EXPOSE_PORT:3000
+
+volumes:
+  db:

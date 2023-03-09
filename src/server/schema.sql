@@ -1,9 +1,9 @@
 -- CreateDatabase
-CREATE DATABASE contacto;
+CREATE DATABASE IF NOT EXISTS contacto;
 use contacto;
 
 -- Create account table
-CREATE TABLE account (
+CREATE TABLE IF NOT EXISTS account (
     id uuid DEFAULT uuid (),
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE account (
 );
 
 -- Create record table
-CREATE TABLE record (
+CREATE TABLE IF NOT EXISTS record (
     id uuid DEFAULT uuid (),
     firstname TEXT NOT NULL,
     lastname TEXT,

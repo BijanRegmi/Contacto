@@ -29,6 +29,7 @@ export const dbConn = async () => {
 	const pool = mysql.createPool({
 		connectionLimit: 10,
 		host: process.env.SQL_HOST,
+                port: parseInt(process.env.SQL_PORT as string) || 3306,
 		user: process.env.SQL_USER,
 		password: process.env.SQL_PASS,
 		database: process.env.SQL_DB,
