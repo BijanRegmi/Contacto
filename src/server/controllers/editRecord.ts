@@ -34,7 +34,6 @@ export const editRecordProc = async ({
 		"UPDATE record SET " +
 		keys.map(key => `${key}=?`).join(", ") +
 		" WHERE id=? AND accountId=?;"
-	console.log(queryStr, input.data)
 
 	const [response, _fields] = await db.query<QueryResponse[]>(queryStr, [
 		...Object.values(input.data),

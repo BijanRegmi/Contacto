@@ -34,6 +34,5 @@ export const listRecordsProc = async ({
 		userId,
 	])
 
-	console.log(response)
 	return response
 }
