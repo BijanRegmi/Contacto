@@ -1,5 +1,6 @@
 -- CreateDatabase
-CREATE DATABASE IF NOT EXISTS contacto;
+DROP DATABASE IF EXISTS contacto;
+CREATE DATABASE contacto;
 use contacto;
 
 -- Create account table
@@ -19,10 +20,11 @@ CREATE TABLE IF NOT EXISTS record (
     lastname TEXT,
     company TEXT,
     phone BIGINT NOT NULL,
-    email TEXT UNIQUE,
+    email TEXT,
     accountId uuid,
     image LONGTEXT,
 
     CONSTRAINT record_pkey PRIMARY KEY (id),
-    CONSTRAINT record_accountId_fkey FOREIGN KEY (accountId) REFERENCES account(id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT record_accountId_fkey FOREIGN KEY (accountId) REFERENCES account(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT record_unique UNIQUE (accountId, phone)
 );
