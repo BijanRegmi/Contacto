@@ -5,8 +5,8 @@ import { userProc } from "@/server/controllers/user"
 import { logoutProc } from "../controllers/logout"
 
 export const authRouter = router({
-	login: procedure.input(loginSchema).mutation(loginProc),
-	register: procedure.input(registerSchema).mutation(registerProc),
-	user: privateProcedure.query(userProc),
-	logout: procedure.mutation(logoutProc),
+    login: procedure.input(loginSchema).mutation(loginProc),
+    register: procedure.input(registerSchema).mutation(registerProc),
+    user: privateProcedure.query(userProc),
+    logout: procedure.mutation(logoutProc),
 })
